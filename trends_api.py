@@ -1,6 +1,11 @@
 import time
+import openai
 from fastapi import FastAPI
 from pytrends.request import TrendReq
+
+import os  # 環境変数を使うために追加
+
+API_KEY = os.getenv("OPENAI_API_KEY")  # 環境変数からAPIキーを取得
 
 app = FastAPI()
 
@@ -9,7 +14,6 @@ def get_trends(keyword: str):
     pytrends = TrendReq(hl='ja-JP', tz=540)
     kw_list = [keyword]
 
-    # リトライを最大3回まで実行
     for _ in range(3):
         try:
             pytrends.build_payload(kw_list, timeframe='now 1-H', geo='JP')
